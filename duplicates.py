@@ -7,12 +7,12 @@ from collections import Counter
 def find_duplicates(files):
     filtered = list()
     duplicates = list()
-    for file in files:
-        file_info = list(file.keys())[0]
-        if file_info in filtered:
-            duplicates.append(file)
+    for file_info in files:
+        file_stats = list(file_info.keys())[0]
+        if file_stats in filtered:
+            duplicates.append(file_info)
         else:
-            filtered.append(file_info)
+            filtered.append(file_stats)
     return duplicates
 
 
@@ -46,7 +46,7 @@ if __name__ == '__main__':
     duplicates = find_duplicates(all_files)
     if duplicates:
         print('These files are duplicates and can be deleted safely:')
-        for file in duplicates:
-            pprint_file(file)
+        for file_info in duplicates:
+            pprint_file(file_info)
     else:
         print('Duplicates not found.')
