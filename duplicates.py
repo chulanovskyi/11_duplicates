@@ -27,9 +27,6 @@ def get_all_files(folder):
         current_dir = step[0]
         for file_name in files_in_dir:
             file_size = os.stat(current_dir+'/'+file_name).st_size
-            '''all_files.append({'file_dir': current_dir,
-                              'file_name': file_name,
-                              'file_size': file_size})'''
             all_files.append({(file_name, file_size): current_dir})
     return all_files
 
