@@ -1,10 +1,19 @@
 import os
 import sys
-from itertools import count
+from operator import itemgetter
+from collections import Counter
 
 
-def are_files_duplicates(file_1, file_2):
-    pass
+def find_duplicates(files):
+    filtered = list()
+    duplicates = list()
+    for file in files:
+        file_info = list(file.keys())[0]
+        if file_info in filtered:
+            duplicates.append(file)
+        else:
+            filtered.append(file_info)
+    return duplicates
 
 
 def get_all_files(folder):
@@ -17,15 +26,27 @@ def get_all_files(folder):
             continue
         current_dir = step[0]
         for file_name in files_in_dir:
-            file_size = os.stat(current_dir+'\\'+file_name).st_size
-            all_files.append({'file_dir': current_dir,
+            file_size = os.stat(current_dir+'/'+file_name).st_size
+            '''all_files.append({'file_dir': current_dir,
                               'file_name': file_name,
-                              'file_size': file_size})
-    for file in all_files:
-        print(file)
+                              'file_size': file_size})'''
+            all_files.append({(file_name, file_size): current_dir})
     return all_files
 
 
+def pprint_file(file):
+    file_name = list(file.keys())[0][0]
+    file_path = list(file.values())[0]
+    print('/'.join((file_path, file_name)))
+
+
 if __name__ == '__main__':
-    #dir_to_scan = sys.argv[1]
-    get_all_files(os.getcwd())
+    dir_to_scan = sys.argv[1]
+    all_files = get_all_files(dir_to_scan)
+    duplicates = find_duplicates(all_files)
+    if duplicates:
+        print('These files are duplicates and can be deleted safely:')
+        for file in duplicates:
+            pprint_file(file)
+    else:
+        print('Duplicates not found.')
